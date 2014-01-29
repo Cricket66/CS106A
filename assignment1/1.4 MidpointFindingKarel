@@ -1,0 +1,114 @@
+/*
+ * File: MidpointFindingKarel.java
+ * -------------------------------
+ * When you finish writing it, the MidpointFindingKarel class should
+ * leave a beeper on the corner closest to the center of 1st Street
+ * (or either of the two central corners if 1st Street has an even
+ * number of corners).  Karel can put down additional beepers as it
+ * looks for the midpoint, but must pick them up again before it
+ * stops.  The world may be of any size, but you are allowed to
+ * assume that it is at least as tall as it is wide.
+ */
+
+import stanford.karel.*;
+
+public class MidpointFindingKarel extends SuperKarel {
+	
+	/* Karel drops a beeper on each end of the 1st street.  It will now be at the start 
+	 * position again facing East on top of a beeper.  Then, Karel will move to find 
+	 * a beeper at the opposite end and move it towards a midpoint until there is no more beeper
+	 * to move.  Then, it will make a final move to find the mid point and stop there. 
+	 */
+
+	public void run(){
+		putBeeperAtEnd();
+		move();
+		while(noBeepersPresent()){
+				findBeeperEast();
+				moveBeeper();
+				findBeeperWest();
+				moveBeeper();
+			if(frontIsClear()){
+				move();
+			}
+			standAtMidPoint();
+		}
+	}
+
+	private void putBeeperAtEnd(){
+		while(facingEast()){		//start the loop when facing East
+			if(frontIsClear()){		//move until reaches the wall
+				move();
+			}else{					//when there is a wall, drop a beeper and turn around
+				putBeeper();	 	
+				turnAround();
+			}
+		}
+		while(facingWest()){		//same as when facing East
+			if(frontIsClear()){
+				move();
+			}else{
+				putBeeper();
+				turnAround();	
+			}
+		}
+	}
+	
+	
+	private void findBeeperEast(){
+		while(facingEast()){		//start a loop while facing East
+			if(frontIsClear()){		//keep moving until...  
+				move();
+				}
+				if(beepersPresent()){	//find a beeper, then turn around  
+					turnAround();		
+				}
+				if(frontIsBlocked()){	//reach the wall with no beeper found, then turn right 
+					if(noBeepersPresent()){
+					turnRight();		
+					}
+				}
+		}
+	}
+
+	
+	private void findBeeperWest(){
+		while(facingWest()){			//same as findBeeperEast (while facing West)
+			if(frontIsClear()){
+			move();
+			}
+			if(beepersPresent()){
+				turnAround();
+			}
+			if(frontIsBlocked()){
+				if(noBeepersPresent()){
+				turnLeft();
+				}
+			}
+		}
+	}
+	
+	private void moveBeeper(){
+		if(beepersPresent()){
+			pickBeeper();
+			move();
+			if(noBeepersPresent()){
+				putBeeper();
+			}
+		}
+	}
+	
+	private void standAtMidPoint(){
+		while(facingSouth()){
+			turnRight();
+			if(leftIsBlocked()){
+				while(noBeepersPresent()){
+					move();
+				}
+			}
+		}
+	}
+
+	
+}
+
