@@ -48,8 +48,10 @@ public class MidpointFindingKarel extends SuperKarel {
 			if(frontIsClear()){
 				move();
 			}else{
-				putBeeper();
-				turnAround();	
+				if(noBeepersPresent()){
+					putBeeper();
+					turnAround();
+				}
 			}
 		}
 	}
@@ -90,10 +92,12 @@ public class MidpointFindingKarel extends SuperKarel {
 	
 	private void moveBeeper(){
 		if(beepersPresent()){
+			if(frontIsClear()){
 			pickBeeper();
 			move();
-			if(noBeepersPresent()){
-				putBeeper();
+				if(noBeepersPresent()){
+					putBeeper();
+				}
 			}
 		}
 	}
